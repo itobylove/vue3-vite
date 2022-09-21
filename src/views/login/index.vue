@@ -30,7 +30,7 @@
                     </el-input>
                   </el-form-item>
                   <el-form-item  prop="password">
-                    <el-input v-model="ruleForm.password" placeholder="请输入密码" >
+                    <el-input v-model="ruleForm.password" placeholder="请输入密码" show-password>
                     <template #prefix>
                       <el-icon class="el-input__icon"><Lock /></el-icon>
                     </template>
@@ -48,27 +48,35 @@
 <script setup>
   import { reactive, ref } from 'vue'
   import { Lock, User } from '@element-plus/icons-vue'
+  import { login } from '@/api/manager'
   const ruleForm = reactive({
     username:'',
     password:''
   })
-  const formSize = ref();
-  const ruleFormRef = ref();
+  const formSize = ref(null);
+  const ruleFormRef = ref(null);
   const rules = reactive({
     username:[
-      { required: true, message: '账号不能为空', trigger: 'blur' },
-      { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' },
+      { required: true, message: '账号不能为空', trigger: 'blur' }
     ],
     password:[
       { required: true, message: '密码不能为空', trigger: 'blur' },
-      { min: 3, max: 5, message: '密码长度需3~5位', trigger: 'blur' },
+      // { min: 6, max: 16, message: '密码长度需3~5位', trigger: 'blur' },
     ]
   })
   const submitForm = (formEl)=>{
     if(!formEl) return
     formEl.validate((valid) =>{
       if(!valid) return
-      console.log(ruleForm);
+      let data = {
+        username:ruleForm.username,
+        password:ruleForm.password
+      }
+      login(data).then(res =>{
+        console.log(res);
+      }).catch(err =>{
+        console.log(err);
+      })
     })
   }
 </script>
