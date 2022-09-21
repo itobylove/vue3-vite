@@ -49,6 +49,9 @@
   import { reactive, ref } from 'vue'
   import { Lock, User } from '@element-plus/icons-vue'
   import { login } from '@/api/manager'
+  import { ElNotification } from 'element-plus'
+  import { useRouter } from 'vue-router'
+  const router = useRouter()
   const ruleForm = reactive({
     username:'',
     password:''
@@ -73,9 +76,22 @@
         password:ruleForm.password
       }
       login(data).then(res =>{
-        console.log(res);
+        //提示成功
+        ElNotification({
+          title:'提示',
+          message:'登录成功',
+          type:'success',
+          duration:3000
+        })
+        //调整到首页
+        router.push('/')
       }).catch(err =>{
-        console.log(err);
+        ElNotification({
+          title: '提示',
+          message: err.response.data.msg || '请求错误',
+          type: 'error',
+          duration:3000
+        })
       })
     })
   }
