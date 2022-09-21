@@ -49,7 +49,8 @@
   import { reactive, ref } from 'vue'
   import { Lock, User } from '@element-plus/icons-vue'
   import { login,getinfo } from '@/api/manager'
-  import { ElNotification } from 'element-plus'
+  // import { ElNotification } from 'element-plus'
+  import { toast } from '@/composables/utils'
   import { useRouter } from 'vue-router'
   // import { useCookies } from '@vueuse/integrations/useCookies'
   import { setToken } from '@/composables/auth'
@@ -84,12 +85,13 @@
         //清除loading
         loading.value = false
         //提示成功
-        ElNotification({
-          title:'提示',
-          message:'登录成功',
-          type:'success',
-          duration:3000
-        })
+        toast('登录成功')
+        // ElNotification({
+        //   title:'提示',
+        //   message:'登录成功',
+        //   type:'success',
+        //   duration:3000
+        // })
         //设置cookie
         // const cookie = useCookies()
         // cookie.set('token',res.token);
@@ -97,12 +99,13 @@
         //调整到首页
         router.push('/')
       }).catch(err =>{
-        ElNotification({
-          title: '提示',
-          message: err.msg || '请求错误',
-          type: 'error',
-          duration:3000
-        })
+        toast(err.response.data.msg,'error')
+        // ElNotification({
+        //   title: '提示',
+        //   message: err.msg || '请求错误',
+        //   type: 'error',
+        //   duration:3000
+        // })
       }).finally( ()=>{
         //清楚loading
         loading.value = false

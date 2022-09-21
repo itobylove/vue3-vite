@@ -1,4 +1,5 @@
 import axios from 'axios'
+//未封装写法
 // import { useCookies } from '@vueuse/integrations/useCookies'
 import { getToken } from '@/composables/auth'
 const server = axios.create({
@@ -8,9 +9,9 @@ const server = axios.create({
 // 添加请求拦截器
 server.interceptors.request.use(function (config) {
     // 在发送请求之前做些什么
-    // const cookie = useCookies()
+    // const cookie = useCookies() //未封装写法
     // const token = cookie.get('token')
-    const token = getToken()
+    const token = getToken()//封装写法
     if(token){
         config.headers['token'] = token
     }
