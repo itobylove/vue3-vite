@@ -1,5 +1,6 @@
 import axios from 'axios'
-import { useCookies } from '@vueuse/integrations/useCookies'
+// import { useCookies } from '@vueuse/integrations/useCookies'
+import { getToken } from '@/composables/auth'
 const server = axios.create({
     baseURL: '/api',
     timeout: 10000,
@@ -7,8 +8,9 @@ const server = axios.create({
 // 添加请求拦截器
 server.interceptors.request.use(function (config) {
     // 在发送请求之前做些什么
-    const cookie = useCookies()
-    const token = cookie.get('token')
+    // const cookie = useCookies()
+    // const token = cookie.get('token')
+    const token = getToken()
     if(token){
         config.headers['token'] = token
     }

@@ -51,7 +51,8 @@
   import { login,getinfo } from '@/api/manager'
   import { ElNotification } from 'element-plus'
   import { useRouter } from 'vue-router'
-  import { useCookies } from '@vueuse/integrations/useCookies'
+  // import { useCookies } from '@vueuse/integrations/useCookies'
+  import { setToken } from '@/composables/auth'
   const router = useRouter()
   const ruleForm = reactive({
     username:'admin',
@@ -90,8 +91,9 @@
           duration:3000
         })
         //设置cookie
-        const cookie = useCookies()
-        cookie.set('token',res.token);
+        // const cookie = useCookies()
+        // cookie.set('token',res.token);
+        setToken(res.token)
         //调整到首页
         router.push('/')
       }).catch(err =>{
