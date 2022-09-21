@@ -1,4 +1,5 @@
 import server from '@/utils/axios'
+//登录
 export const login = (data) =>{
     return server.post('/admin/login',data)
 }
@@ -8,3 +9,7 @@ export const login = (data) =>{
 //         password:password
 //     })
 // }
+// 获取管理员列表
+export function getinfo(page){
+    return server.get('/admin/manager/'+page)
+}

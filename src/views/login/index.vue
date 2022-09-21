@@ -37,7 +37,7 @@
                     </el-input>
                   </el-form-item>
                   <el-form-item>
-                    <el-button class="w-[250px]" color="#626aef" round type="primary" @click="submitForm(ruleFormRef)">登录</el-button>
+                    <el-button class="w-[250px]" color="#626aef" round type="primary" :loading="loading" @click="submitForm(ruleFormRef)">登录</el-button>
                   </el-form-item>
                 </el-form>
             </el-col>
@@ -48,17 +48,18 @@
 <script setup>
   import { reactive, ref } from 'vue'
   import { Lock, User } from '@element-plus/icons-vue'
-  import { login } from '@/api/manager'
+  import { login,getinfo } from '@/api/manager'
   import { ElNotification } from 'element-plus'
   import { useRouter } from 'vue-router'
   import { useCookies } from '@vueuse/integrations/useCookies'
   const router = useRouter()
   const ruleForm = reactive({
-    username:'',
-    password:''
+    username:'admin',
+    password:'admin'
   })
   const formSize = ref(null);
   const ruleFormRef = ref(null);
+  const loading = ref(false)
   const rules = reactive({
     username:[
       { required: true, message: '账号不能为空', trigger: 'blur' }
@@ -72,11 +73,15 @@
     if(!formEl) return
     formEl.validate((valid) =>{
       if(!valid) return
+      //执行loading
+      loading.value = true
       let data = {
         username:ruleForm.username,
         password:ruleForm.password
       }
       login(data).then(res =>{
+        //清除loading
+        loading.value = false
         //提示成功
         ElNotification({
           title:'提示',
@@ -86,16 +91,19 @@
         })
         //设置cookie
         const cookie = useCookies()
-        cookie.set('token',res.data.data.token);
+        cookie.set('token',res.token);
         //调整到首页
         router.push('/')
       }).catch(err =>{
         ElNotification({
           title: '提示',
-          message: err.response.data.msg || '请求错误',
+          message: err.msg || '请求错误',
           type: 'error',
           duration:3000
         })
+      }).finally( ()=>{
+        //清楚loading
+        loading.value = false
       })
     })
   }
