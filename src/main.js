@@ -14,5 +14,6 @@ import 'virtual:windi.css'
 app.use(router)
 // 将 store 实例作为插件安装
 app.use(store)
-
+//引入nprogress
+import 'nprogress/nprogress.css'
 app.mount('#app')

@@ -5,7 +5,7 @@ import IndexRouter from './modules/index.js'
 import LoginRouter from './modules/login.js'
 import NotfoundRouter from '@/views/notfound/index.vue'
 import { getToken } from '@/composables/auth'
-import { toast } from '@/composables/utils'
+import { toast,showFullLoading,hideFullLoading } from '@/composables/utils'
 import store from '../store/index.js'
 
 const routes = [
@@ -30,6 +30,7 @@ const router = createRouter({
 })
 //路由前置全局前置守卫
 router.beforeEach(async (to, from, next) =>{
+    showFullLoading()
     const token = getToken()
     //未登录，强制跳转到登录页面
     if(!token && to.path != '/login'){
@@ -46,5 +47,9 @@ router.beforeEach(async (to, from, next) =>{
         await store.dispatch('getinfo')
     }
     next()
+})
+//全局后置钩子
+router.afterEach((to, from) => {
+    hideFullLoading()
 })
 export default router
