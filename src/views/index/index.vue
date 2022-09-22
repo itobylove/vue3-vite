@@ -1,6 +1,7 @@
 <template>
     <div>
-        {{ $store.state.user }}
+        {{ $store.state.user.username }}
+        <el-button @click="logout">退出登录</el-button>
     </div>
 </template>
 
@@ -8,6 +9,7 @@
 import { onMounted } from 'vue'
 import { getinfo } from '@/api/manager'
 import { useStore } from 'vuex'
+import { showModal } from '@/composables/utils'
 const store = useStore()
 onMounted(() =>{
     // //获取管理员列表
@@ -20,6 +22,17 @@ onMounted(() =>{
     //     store.commit('SET_USERINFO',ret)
     // })
 })
+function logout(){
+    showModal('你确定要退出登录吗?').then(() =>{
+        console.log('确定操作');
+    }).catch((action) =>{
+        if(action == 'cancel'){
+            console.log('cancel');
+        }else{
+            console.log('close');
+        }
+    })
+}
 </script>
 
 <style lang="scss" scoped>
