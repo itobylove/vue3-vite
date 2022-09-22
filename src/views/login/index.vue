@@ -46,7 +46,7 @@
 </template>
 
 <script setup>
-  import { reactive, ref } from 'vue'
+  import { onMounted, reactive, ref } from 'vue'
   import { Lock, User } from '@element-plus/icons-vue'
   // import { login,getinfo } from '@/api/manager'
   // import { ElNotification } from 'element-plus'
@@ -72,6 +72,14 @@
       // { min: 6, max: 16, message: '密码长度需3~5位', trigger: 'blur' },
     ]
   })
+  onMounted(()=>{
+    document.addEventListener('keyup',onKeyUp)
+  })
+  function onKeyUp(e) {
+    if(e.key == 'Enter'){
+      submitForm()
+    }
+  }
   const submitForm = (formEl)=>{
     if(!formEl) return
     formEl.validate((valid) =>{
