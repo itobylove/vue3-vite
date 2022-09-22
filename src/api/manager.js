@@ -31,3 +31,7 @@ export function getinfo(page){
 //         params
 //     })
 // }
+//退出登录
+export function logout(){
+    return server.post('/admin/logout')
+}

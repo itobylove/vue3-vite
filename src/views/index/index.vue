@@ -1,15 +1,17 @@
 <template>
     <div>
-        {{ $store.state.user.username }}
-        <el-button @click="logout">退出登录</el-button>
+        {{ $store.state.user.totalCount }}
+        <el-button @click="handleLogout">退出登录</el-button>
     </div>
 </template>
 
 <script setup>
 import { onMounted } from 'vue'
-import { getinfo } from '@/api/manager'
+import { getinfo,logout } from '@/api/manager'
 import { useStore } from 'vuex'
-import { showModal } from '@/composables/utils'
+import { toast,showModal } from '@/composables/utils'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const store = useStore()
 onMounted(() =>{
     // //获取管理员列表
@@ -22,9 +24,14 @@ onMounted(() =>{
     //     store.commit('SET_USERINFO',ret)
     // })
 })
-function logout(){
+function handleLogout(){
     showModal('你确定要退出登录吗?').then(() =>{
-        console.log('确定操作');
+        logout().then((res) =>{
+            store.dispatch('logout')
+            //跳转到登录页面
+            router.push('/login')
+            toast('退出成功')
+        })
     }).catch((action) =>{
         if(action == 'cancel'){
             console.log('cancel');
