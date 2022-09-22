@@ -48,12 +48,13 @@
 <script setup>
   import { reactive, ref } from 'vue'
   import { Lock, User } from '@element-plus/icons-vue'
-  import { login,getinfo } from '@/api/manager'
+  // import { login,getinfo } from '@/api/manager'
   // import { ElNotification } from 'element-plus'
   import { toast } from '@/composables/utils'
   import { useRouter } from 'vue-router'
   // import { useCookies } from '@vueuse/integrations/useCookies'
-  import { setToken } from '@/composables/auth'
+  // import { setToken } from '@/composables/auth'
+ import store from '@/store/index.js'
   const router = useRouter()
   const ruleForm = reactive({
     username:'admin',
@@ -77,39 +78,46 @@
       if(!valid) return
       //执行loading
       loading.value = true
-      let data = {
-        username:ruleForm.username,
-        password:ruleForm.password
-      }
-      login(data).then(res =>{
+      store.dispatch('login',ruleForm).then(res => {
         //清除loading
         loading.value = false
-        //提示成功
         toast('登录成功')
-        // ElNotification({
-        //   title:'提示',
-        //   message:'登录成功',
-        //   type:'success',
-        //   duration:3000
-        // })
-        //设置cookie
-        // const cookie = useCookies()
-        // cookie.set('token',res.token);
-        setToken(res.token)
-        //调整到首页
         router.push('/')
       }).catch(err =>{
         toast(err.response.data.msg,'error')
-        // ElNotification({
-        //   title: '提示',
-        //   message: err.msg || '请求错误',
-        //   type: 'error',
-        //   duration:3000
-        // })
-      }).finally( ()=>{
+      }).finally(() =>{
         //清楚loading
         loading.value = false
       })
+      // login(data).then(res =>{
+      //   //清除loading
+      //   loading.value = false
+      //   //提示成功
+      //   toast('登录成功')
+      //   // ElNotification({
+      //   //   title:'提示',
+      //   //   message:'登录成功',
+      //   //   type:'success',
+      //   //   duration:3000
+      //   // })
+      //   //设置cookie
+      //   // const cookie = useCookies()
+      //   // cookie.set('token',res.token);
+      //   setToken(res.token)
+      //   //调整到首页
+      //   router.push('/')
+      // }).catch(err =>{
+      //   toast(err.response.data.msg,'error')
+      //   // ElNotification({
+      //   //   title: '提示',
+      //   //   message: err.msg || '请求错误',
+      //   //   type: 'error',
+      //   //   duration:3000
+      //   // })
+      // }).finally( ()=>{
+      //   //清楚loading
+      //   loading.value = false
+      // })
     })
   }
 </script>

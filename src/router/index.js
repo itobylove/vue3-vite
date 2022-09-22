@@ -6,6 +6,7 @@ import LoginRouter from './modules/login.js'
 import NotfoundRouter from '@/views/notfound/index.vue'
 import { getToken } from '@/composables/auth'
 import { toast } from '@/composables/utils'
+import store from '../store/index.js'
 
 const routes = [
     IndexRouter,
@@ -28,7 +29,7 @@ const router = createRouter({
     routes:[...routes]
 })
 //路由前置全局前置守卫
-router.beforeEach((to, from, next) =>{
+router.beforeEach(async (to, from, next) =>{
     const token = getToken()
     //未登录，强制跳转到登录页面
     if(!token && to.path != '/login'){
@@ -39,6 +40,10 @@ router.beforeEach((to, from, next) =>{
     if(token && to.path == '/login'){
         toast('请勿重复登录','error')
         return next({ path: from.path ? from.path : '/'})
+    }
+    //如果用户登录了，自动获取登录用户信息，并存储在vuex中
+    if(token){
+        await store.dispatch('getinfo')
     }
     next()
 })
