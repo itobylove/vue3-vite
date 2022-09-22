@@ -2,7 +2,7 @@ export default{
     path:'/',
     name:'index',
     meta:{
-        title:'首页'
+        title:'后台首页'
     },
     component: ()=> import('@/views/index/index.vue')
 }

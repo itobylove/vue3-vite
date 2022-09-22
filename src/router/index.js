@@ -46,6 +46,9 @@ router.beforeEach(async (to, from, next) =>{
     if(token){
         await store.dispatch('getinfo')
     }
+    //设置页面标题
+    let title = (to.meta.title ? to.meta.title : '') + '后台系统'
+    document.title = title
     next()
 })
 //全局后置钩子
